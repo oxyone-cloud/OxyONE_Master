@@ -1,0 +1,53 @@
+/* --- OxyONE INDUSTRIAL LOOK --- */
+.face {
+    position: absolute;
+    width: 200px;
+    height: 200px;
+    /* Couleur Inox Sombre */
+    background: linear-gradient(135deg, #1c2a35 0%, #050505 100%) !important;
+    border: 2px solid rgba(0, 242, 255, 0.7) !important;
+    
+    /* Nervures Panneaux Sandwich (Chambre Froide) */
+    background-image: repeating-linear-gradient(
+        0deg,
+        rgba(0, 242, 255, 0.05) 0px,
+        rgba(0, 242, 255, 0.05) 1px,
+        transparent 1px,
+        transparent 25px
+    ) !important;
+    
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    color: #00f2ff;
+    box-shadow: inset 0 0 30px rgba(0, 242, 255, 0.15);
+    font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+/* Ajout d'une poignée de porte industrielle sur la face avant */
+.front::after {
+    content: "";
+    position: absolute;
+    right: 15px;
+    top: 25%;
+    width: 4px;
+    height: 100px;
+    background: #00f2ff;
+    box-shadow: 0 0 15px #00f2ff;
+    border-radius: 2px;
+}
+
+/* Texte à l'intérieur des faces */
+.face span {
+    font-size: 10px;
+    opacity: 0.6;
+    margin-bottom: 5px;
+}
+
+.face strong {
+    font-size: 16px;
+    text-shadow: 0 0 5px #00f2ff;
+}

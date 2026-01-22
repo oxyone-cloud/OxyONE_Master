@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>COLD SERVICE | ULTIMATE NODE 2026</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap');
+        
+        * { box-sizing: border-box; }
+        :root { --neon: #00d4ff; --bg: #010305; --panel: rgba(2, 12, 25, 0.98); --success: #00ff88; --gold: #ffd700; --danger: #ff4444; }
+        
+        body { margin: 0; overflow: hidden; background: var(--bg); font-family: 'Orbitron', sans-serif; color: white; text-transform: uppercase; }
+        
+        /* ALERT NOTIFICATION */
+        #alert-bar {
+            position: fixed; top: -100px; left: 0; width: 100%; height: 70px;
+            background: var(--danger); color: white; display: flex; align-items: center; justify-content: center;
+            z-index: 10005; font-weight: bold; letter-spacing: 5px; transition: 0.6s cubic-bezier(0.18, 0.89, 0.32, 1.28);
+            box-shadow: 0 5px 30px rgba(255, 68, 68, 0.5); border-bottom: 3px solid white; font-size: 1.2rem;
+        }
+
+        /* LOGIN GATE */
+        #login-gate {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: radial-gradient(circle at center, #021020 0%, #000 100%);
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            z-index: 10000; transition: transform 1s ease-in-out;
+        }
+        .login-box { width: 450px; padding: 50px; border: 2px solid var(--neon); background: rgba(0, 212, 255, 0.05); text-align: center; box-shadow: 0 0 50px rgba(0, 212, 255, 0.2); }
+        input { width: 100%; padding: 15px; margin-bottom: 15px; background: #000; border: 1px solid var(--neon); color: white; font-family: 'Orbitron'; text-align: center; font-size: 1rem; }
+        .btn-main { width: 100%; padding: 18px; background: var(--neon); border: none; color: #000; font-weight: bold; cursor: pointer; font-family: 'Orbitron'; font-size: 1rem; margin-top: 10px; }
+        .btn-demo { width: 100%; padding: 12px; background: transparent; border: 2px solid var(--gold); color: var(--gold); margin-top: 20px; cursor: pointer; font-family: 'Orbitron'; font-size: 0.8rem; }
+
+        /* MAIN UI */
+        #main-ui { opacity: 0; visibility: hidden; transition: opacity 1.5s ease; position: relative; width: 100vw; height: 100vh; }
+        canvas#three-canvas { position: absolute; top: 0; left: 0; z-index: 1; width: 100%; height: 100%; }
+        
+        header { position: absolute; top: 0; width: 100%; padding: 25px 50px; display: flex; justify-content: space-between; align-items: center; z-index: 1000; border-bottom: 2px solid var(--neon); background: rgba(0,0,0,0.8); }
+        
+        .panel { position: absolute; background: var(--panel); border: 2px solid var(--neon); padding: 25px; z-index: 2000; backdrop-filter: blur(15px); box-shadow: 0 0 30px rgba(0,212,255,0.1); }
+        #left-panel { top: 130px; left: 40px; width: 400px; }
+        #right-panel { top: 130px; right: 40px; width: 400px; }
+
+        .temp-display { font-size: 4rem; text-align: center; color: var(--success); text-shadow: 0 0 30px var(--success); margin: 10px 0; font-weight: bold; }
+        
+        /* BLUETOOTH WIDGET */
+        .bt-widget { margin: 20px 0; padding: 20px; border: 1px solid var(--neon); background: rgba(0, 212, 255, 0.05); }
+        .btn-bt { width: 100%; padding: 12px; background: transparent; border: 2px solid var(--neon); color: var(--neon); font-family: 'Orbitron'; cursor: pointer; font-size: 0.7rem; font-weight: bold; }
+        .btn-bt:hover { background: var(--neon); color: black; }
+
+        /* HIGH-TECH LINKS */
+        .eco-link { 
+            display: flex; align-items: center; justify-content: center;
+            text-decoration: none; color: white; height: 90px; margin-bottom: 25px; 
+            border: 3px solid var(--neon); background: rgba(0, 212, 255, 0.1);
+            font-size: 1.3rem; font-weight: bold; letter-spacing: 2px;
+            transition: 0.4s; text-shadow: 0 0 15px var(--neon);
+            box-shadow: inset 0 0 15px rgba(0,212,255,0.2);
+        }
+        .eco-link:hover { background: var(--neon); color: #000; box-shadow: 0 0 40px var(--neon); transform: scale(1.03); }
+
+        .zone-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 20px; }
+        .zone-btn { padding: 12px; border: 1px solid var(--neon); font-size: 0.7rem; text-align: center; cursor: pointer; transition: 0.2s; background: rgba(0,0,0,0.5); }
+        .zone-btn:hover { background: var(--neon); color: black; }
+
+        .footer { position: absolute; bottom: 0; width: 100%; padding: 20px 50px; border-top: 1px solid var(--neon); display: flex; justify-content: space-between; z-index: 1000; font-size: 0.7rem; background: #000; }
+    </style>
+</head>
+<body>
+
+<div id="alert-bar">⚠ SIGNAL LOST: MOBILE DISCONNECTED ⚠</div>
+
+<div id="login-gate">
+    <div style="text-align: center; margin-bottom: 30px;">
+        <h1 style="letter-spacing: 20px; font-size: 2.5rem; margin:0;">COLD SERVICE</h1>
+        <p style="color: var(--neon); letter-spacing: 8px; font-size: 0.8rem;">OxyONE SYSTEMS • 2026</p>
+    </div>
+    <div class="login-box">
+        <input type="text" placeholder="OPERATOR ID" id="u-id">
+        <input type="password" placeholder="SECURITY KEY">
+        <button class="btn-main" onclick="launch(false)">AUTHORIZE ACCESS</button>
+        <button class="btn-demo" onclick="launch(true)">VIEW DEMO VERSION</button>
+    </div>
+</div>
+
+<div id="main-ui">
+    <header>
+        <div>
+            <span style="font-size: 1.8rem; font-weight: 700;">COLD SERVICE</span>
+            <span id="badge" style="margin-left:20px; padding:5px 15px; font-size:0.7rem; border:1px solid white;">NODE_ID: 77-ORN</span>
+        </div>
+        <div id="live-time" style="font-size: 1.8rem;">00:00:00</div>
+    </header>
+
+    <div id="left-panel" class="panel">
+        <div style="font-size: 0.7rem; color: var(--neon); letter-spacing: 2px;">LIVE TELEMETRY</div>
+        <div class="temp-display" id="temp-val">-18.4°C</div>
+        
+        <div class="bt-widget">
+            <div style="display:flex; justify-content:space-between; font-size:0.6rem; margin-bottom:12px;">
+                <span>BT MODULE: <span id="bt-stat" style="color:var(--gold)">READY</span></span>
+                <span id="bt-batt" style="display:none; color:var(--success)">BATT: 92%</span>
+            </div>
+            <button class="btn-bt" id="bt-btn" onclick="syncBT()">PAIR MOBILE DEVICE</button>
+        </div>
+
+        <div class="zone-grid">
+            <div class="zone-btn" onmouseover="h(0)" onmouseout="u(0)">ZONE ALPHA</div>
+            <div class="zone-btn" onmouseover="h(1)" onmouseout="u(1)">ZONE BETA</div>
+            <div class="zone-btn" onmouseover="h(2)" onmouseout="u(2)">ZONE GAMMA</div>
+            <div class="zone-btn" onmouseover="h(3)" onmouseout="u(3)">ZONE DELTA</div>
+        </div>
+        <div style="margin-top:20px; font-size:0.6rem; border-top:1px solid rgba(0,212,255,0.2); padding-top:10px;">
+            <div style="display:flex; justify-content:space-between;"><span>GROSS WEIGHT:</span><span>24,500 KG</span></div>
+            <div style="display:flex; justify-content:space-between; margin-top:5px;"><span>DOOR STATUS:</span><span style="color:var(--success)">LOCKED</span></div>
+        </div>
+    </div>
+
+    <div id="right-panel" class="panel">
+        <div style="text-align:center; font-size:0.8rem; color:var(--neon); margin-bottom:30px; letter-spacing:3px;">SYSTEM ECOSYSTEM</div>
+        <a href="https://digitalsense-5a6f2.web.app/" target="_blank" class="eco-link">DIGITAL SENSE AI</a>
+        <a href="https://sscicoldchain-demo.web.app/" target="_blank" class="eco-link">SSCI BLOCKCHAIN</a>
+        <div style="text-align: center; color: var(--gold); font-size: 0.5rem; margin-top: 20px; border: 1px dashed var(--gold); padding: 15px;">AUTHORIZED OPERATIONAL ENVIRONMENT</div>
+    </div>
+
+    <div class="footer">
+        <div>SSCI ALGERIA • ORAN STRATEGIC HUB</div>
+        <div style="color:var(--success)">ENCRYPTION: AES-256-QUANTUM</div>
+        <div style="color:var(--gold)">OxyONE SOFTWAR V2</div>
+    </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+    let scene, camera, renderer, group, zones = [], isBT = false;
+
+    function launch(isDemo) {
+        document.getElementById('badge').innerText = isDemo ? "DEMO VERSION" : "PROD ACTIVE";
+        document.getElementById('badge').style.color = isDemo ? "#ffd700" : "#00ff88";
+        document.getElementById('login-gate').style.transform = 'translateY(-100%)';
+        document.getElementById('main-ui').style.visibility = 'visible';
+        document.getElementById('main-ui').style.opacity = '1';
+        
+        // Timeout pour laisser l'UI s'afficher avant de lancer la 3D
+        setTimeout(init3D, 100);
+    }
+
+    function syncBT() {
+        const btn = document.getElementById('bt-btn');
+        const stat = document.getElementById('bt-stat');
+        const batt = document.getElementById('bt-batt');
+        const alert = document.getElementById('alert-bar');
+
+        if(!isBT) {
+            btn.innerText = "SEARCHING...";
+            setTimeout(() => {
+                isBT = true;
+                btn.innerText = "DISCONNECT DEVICE";
+                btn.style.borderColor = "var(--danger)"; btn.style.color = "var(--danger)";
+                stat.innerText = "CONNECTED"; stat.style.color = "var(--success)";
+                batt.style.display = "block";
+                alert.style.top = "-100px";
+            }, 1500);
+        } else {
+            isBT = false;
+            btn.innerText = "PAIR MOBILE DEVICE";
+            btn.style.borderColor = "var(--neon)"; btn.style.color = "var(--neon)";
+            stat.innerText = "READY"; stat.style.color = "var(--gold)";
+            batt.style.display = "none";
+            alert.style.top = "0px";
+            setTimeout(() => { alert.style.top = "-100px"; }, 4000);
+        }
+    }
+
+    function init3D() {
+        const container = document.getElementById('main-ui');
+        scene = new THREE.Scene();
+        camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
+        
+        renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.setPixelRatio(window.devicePixelRatio);
+        renderer.domElement.id = "three-canvas";
+        container.appendChild(renderer.domElement);
+
+        group = new THREE.Group();
+        
+        // 4 Zones Internes
+        const zG = new THREE.BoxGeometry(1.8, 1.4, 1.8);
+        const pos = [[1, 0.8, 1], [-1, 0.8, 1], [1, -0.8, 1], [-1, -0.8, 1]];
+        pos.forEach(p => {
+            const m = new THREE.Mesh(zG, new THREE.MeshStandardMaterial({color: 0x00d4ff, transparent: true, opacity: 0.15, emissive: 0x00d4ff, emissiveIntensity: 0.2}));
+            m.position.set(...p);
+            zones.push(m);
+            group.add(m);
+        });
+
+        // Porte Secure (Cadre Vert)
+        const door = new THREE.LineSegments(
+            new THREE.EdgesGeometry(new THREE.PlaneGeometry(3.9, 3.1)),
+            new THREE.LineBasicMaterial({color: 0x00ff88, linewidth: 4})
+        );
+        door.position.z = 2.05;
+        group.add(door);
+
+        // Coque externe
+        const shell = new THREE.LineSegments(
+            new THREE.EdgesGeometry(new THREE.BoxGeometry(4.2, 3.4, 4.2)),
+            new THREE.LineBasicMaterial({color: 0x00d4ff, transparent: true, opacity: 0.2})
+        );
+        group.add(shell);
+
+        scene.add(group);
+        scene.add(new THREE.AmbientLight(0xffffff, 1.5));
+        
+        camera.position.set(9, 5, 13);
+        camera.lookAt(0, 0, 0);
+
+        animate();
+    }
+
+    function animate() {
+        requestAnimationFrame(animate);
+        if(group) group.rotation.y += 0.003;
+        renderer.render(scene, camera);
+    }
+
+    function h(i) { zones[i].material.opacity = 0.8; zones[i].material.emissiveIntensity = 2; }
+    function u(i) { zones[i].material.opacity = 0.15; zones[i].material.emissiveIntensity = 0.2; }
+
+    setInterval(() => {
+        document.getElementById('live-time').innerText = new Date().toLocaleTimeString();
+        document.getElementById('temp-val').innerText = (-18.4 + (Math.random()*0.1)).toFixed(1) + "°C";
+    }, 1000);
+
+    window.addEventListener('resize', () => {
+        camera.aspect = window.innerWidth / window.innerHeight;
+        camera.updateProjectionMatrix();
+        renderer.setSize(window.innerWidth, window.innerHeight);
+    });
+</script>
+</body>
+</html>
